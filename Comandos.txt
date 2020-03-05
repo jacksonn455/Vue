@@ -1,0 +1,12 @@
+1) Instalando o CLI do Vue
+npm install -g vue-cli@2.7.0
+
+2) Novo projeto a partir de um template
+vue init webpack-simple alurapic
+
+3) baixar as dependencias
+npm install
+
+4) Quando todas as dependências forem baixadas,
+já podemos subir nossa aplicação através do comando:
+ npm run dev
