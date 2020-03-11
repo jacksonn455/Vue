@@ -65,4 +65,8 @@ export default {
 /** painel-fade-enter: antes do elemento ser incluído ou removido, o estado atual
 // painel-fade-enter-active:  quando o elemento esta sendo incluído
 // painel-fade-leave-active: quando o elemento esta sendo removido **/
+
+  .painel-conteudo {
+    overflow: hidden;
+  }
 </style>
