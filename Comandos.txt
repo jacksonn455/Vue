@@ -16,3 +16,6 @@ npm install vue-resource@1.0.3 --save
 
 6) Carregamento de um ou outro componente de acordo com uma rota específica
 npm install vue-router@2.1.1 --save
+
+7)Estrutura de validação de formulário
+npm install vee-validate@2.0.0-beta.18 --save
