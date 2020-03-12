@@ -6,6 +6,10 @@ import { routes } from './routes';
 import './directives/transform';
 import VeeValidate from 'vee-validate';
 import msg from './pt_BR';
+import 'bootstrap/dist/css/bootstrap.css';
+import './assets/css/teste.css';
+import './assets/js/teste.js'; // importando o script!
+import 'bootstrap/dist/js/bootstrap.js';
 
 Vue.use(VeeValidate, {
   locale: 'pt_BR',

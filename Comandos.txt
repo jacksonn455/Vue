@@ -19,3 +19,18 @@ npm install vue-router@2.1.1 --save
 
 7)Estrutura de validação de formulário
 npm install vee-validate@2.0.0-beta.18 --save
+
+8) Deploy - uma série de passos será realizado, como a concatenação
+ e minificação de scripts e toda lógica de criação de bundle do Webpack será aplicada.
+npm run build
+
+9) Bootstrap
+npm install bootstrap@3.3.7 --save
+npm install css-loader@0.25.0 style-loader@0.13.1 --save-dev
+npm install url-loader@0.5.7 --save-dev
+
+10) Saas
+npm install node-sass@4.5.0 sass-loader@4.1.1 --save-dev
+
+11)Jquery
+npm install jquery@3.1.1 --save
