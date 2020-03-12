@@ -1,93 +1,103 @@
-
-<!-- Single file template que tmb é um módulo-->
-
 <template>
   <div>
-    <h1 class="centralizado">{{ titulo }}</h1>
+    <h1 class="centralizado">Alurapic</h1>
+
+    <!-- novo elemento para exibir mensagens para o usuário -->
+    <p v-show="mensagem" class="centralizado">{{ mensagem }}</p>
+
     <input
       type="search"
       class="filtro"
-      v-on:input="filtro = $event.target.value"
-      placeholder="filtre por parte do titulo"
+      @input="filtro = $event.target.value"
+      placeholder="filtre pelo título da foto"
     />
     <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="(foto, i) of fotosComFiltro" :key="i">
+      <li class="lista-fotos-item" v-for="foto of fotosComFiltro">
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva :url="foto.url" :titulo="foto.titulo" v-meu-transform:rotate.animate="45"/>
-            <meu-botao 
-            rotulo="remover" 
-            tipo="button" 
-            @botaoAtivado="remove(foto)"
+          <imagem-responsiva
+            :url="foto.url"
+            :titulo="foto.titulo"
+            v-meu-transform:scale.animate="1.2"
+          />
+          <meu-botao
+            rotulo="remover"
+            tipo="button"
+            estilo="perigo"
             :confirmacao="true"
-          
-            />  <!--vbind-->
+            @botaoAtivado="remove(foto)"
+          />
         </meu-painel>
       </li>
     </ul>
   </div>
 </template>
 
-<!-- Script - comportamento e o dado-->
 <script>
-
 import Painel from "../shared/painel/Painel.vue";
-import ImageResponsiva from "../shared/imagem-responsiva/ImagemResponsiva";
+import ImagemResponsiva from "../shared/imagem-responsiva/ImagemResponsiva.vue";
 import Botao from "../shared/botao/Botao.vue";
+import FotoService from "../../domain/foto/FotoService";
+
 export default {
   components: {
-    // chave com nome do compotenente
-    "meu-painel": Painel // dando um seletor para um componente
+    "meu-painel": Painel,
+    "imagem-responsiva": ImagemResponsiva,
+    "meu-botao": Botao
   },
 
   data() {
-    // fornece os dados que o template precisa, sempre retorna um objeto javascript
-
     return {
-      titulo: "Alurapic",
       fotos: [],
-      filtro: ""
+
+      filtro: "",
+
+      mensagem: ""
     };
-  },
-
-  methods: {
-
-    remove(foto) {
-      alert('Remover a foto: ' + foto.titulo);
-    }
-  },
-
-  components: {
-    "meu-painel": Painel,
-    "imagem-responsiva": ImageResponsiva,
-    "meu-botao" : Botao
   },
 
   computed: {
     fotosComFiltro() {
       if (this.filtro) {
-        // é uma atalho para acessar o objeto da propriedade data
-        let exp = new RegExp(this.filtro.trim(), "i"); // pega as letras do input (i == tanto faz se esta maiusculo ou minusculo)
-        return this.fotos.filter(foto => exp.test(foto.titulo)); // retorna o array filtrado
+        let exp = new RegExp(this.filtro.trim(), "i");
+        return this.fotos.filter(foto => exp.test(foto.titulo));
       } else {
         return this.fotos;
       }
     }
   },
 
+  methods: {
+
+    remove(foto) {
+
+      this.service
+        .apaga(foto._id)
+        .then(
+          () => {
+            let indice = this.fotos.indexOf(foto);
+            this.fotos.splice(indice, 1);
+            this.mensagem = 'Foto removida com sucesso'
+          }, 
+          err => {
+            this.mensagem = 'Não foi possível remover a foto';
+            console.log(err);
+          }
+        )
+    }
+
+  },
+
   created() {
-    this.$http
-      .get("http://localhost:3000/v1/fotos") // metodo get
-      .then(res => res.json()) // quando os dados chegarem do servidor, eu pego os dados e converto pra json
-      .then(
-        fotos => (this.fotos = fotos),
-        err => console.log(err)
-      ); // quando acaba a converção, eu pego e vou jogar na propriedade fotos do objeto
+
+    // criando uma instância do nosso serviço que depende de $resource
+    this.service = new FotoService(this.$resource);
+
+    this.service
+      .lista()
+      .then(fotos => this.fotos = fotos, err => console.log(err));
   }
-};
+}
 </script>
-
-
-<!-- Style - estilo do template-->
 <style>
 .centralizado {
   text-align: center;
